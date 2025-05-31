@@ -152,7 +152,11 @@ func GetUUID() string {
 const keyChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func init() {
-	rand.New(rand.NewSource(time.Now().UnixNano()))
+	// Seed the global random number generator so functions using
+	// math/rand generate non-deterministic results across runs.
+	// rand.New(...) creates a new generator which was discarded,
+	// leaving the global one unseeded. Use rand.Seed instead.
+	rand.Seed(time.Now().UnixNano())
 }
 
 func GenerateRandomCharsKey(length int) (string, error) {
